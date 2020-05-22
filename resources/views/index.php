@@ -66,6 +66,7 @@
                 <h5 class="modal-title">¿Quien eres?</h5> 
             </div>
             <div class="modal-body">
+                <div class="alert alert-info">Si es primera vez que ingresas favor decomprimir el archivo (ciudades.rar) que esta en la raiz y posterior a generar las migraciones importar dicho archivo a la tabla ciudades</div>
                 <form id="formulario_registro">
                     <div class="form-group" style="display:none;" id="div_error"> 
                         <div class="alert alert-danger" id="alert_error"> 
