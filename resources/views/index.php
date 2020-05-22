@@ -17,15 +17,13 @@
         </div>
         <div class="col-md-2">
         </div>
-        <div class="col-md-4">
-            <form id="formulario_busqueda"> 
+        <div class="col-md-4"> 
                 <div class="form-group"> 
                     <label>Busqueda</label>
                     <input type="text" class="form-control" id="q" name="q">
                     <small id="1" class="form-text text-muted">Para generar la busqueda precionar la tecla "Enter" o dar clic en buscar.</small>
                 </div>  
-                <button type="button" class="btn btn-success" onclick="sugerencias()">Buscar</button>
-            </form>
+                <button type="button" class="btn btn-success" onclick="sugerencias()">Buscar</button> 
         </div>
         <div class="col-md-4">
             <div id="showMap" style="width: 100%; height: 350px;"> </div>
@@ -87,80 +85,18 @@
     <script src="./js/popper.min.js" crossorigin="anonymous"></script>
     <script src="./js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="./js/usuario.js" crossorigin="anonymous"></script>
+    <script src="./js/ciudades.js" crossorigin="anonymous"></script>
     <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
-    <script>  
-        function logArrayElements(element, index, array) {
-            console.log("a[" + index + "] = " + element);
-            $("#t_body").append(' <tr> <td>'+index+'</td>  <td>'+element.name+'</td> <td>'+element.latitude+'</td> <td>'+element.longitude+'</td> <td><button type="button" class="btn btn-primary" onclick="showGoogleMaps('+element.latitude+','+element.longitude+')">Buscar</button></td><tr>  ');
-        }
-        function sugerencias(){  
-            q = $("#q").val();
-            latitude = $("#latitude").val();
-            longitude = $("#longitude").val(); 
-            token = $("#token").val(); 
-            url = "sugerencias?q="+q+"&latitude="+latitude+"&longitude="+longitude;
-            $.ajax({
-                type: "get",
-                dataType: "json", 
-                url: url,
-                beforeSend: function( xhr ) {
-                    $("#datos").html('<img src="./img/loading.gif">');
-                }
-            })
-            .done(function( data, textStatus, jqXHR ) {
-                if ( console && console.log ) {
-                    $("#datos").html("<table class='table'><thead><tr>  <td>#</td>   <td>Nombre</td>  <td>Latitude</td> <td>Longitude</td> <td>Ubicar</td> </tr> </thead><tbody id='t_body'></tbody></table>");
-                    data["suggestions"].forEach(logArrayElements);
-                }
-            })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
-                if ( console && console.log ) {
-                    console.log( "La solicitud a fallado: " +  textStatus);
-                }
-            });
-        }
+    <script>
         $( document ).ready(function() {
             $("#modal_registro").modal({backdrop: 'static', keyboard: false});
-        });
-        function showGoogleMaps(latitud,longitud)
-        {
-            window.scroll({
-            top: 0, 
-            behavior: 'smooth'
+            $('#q').on('keyup', function(event) { 
+                //si se preciona la tecla enter
+                if(event.which==13){
+                    sugerencias();
+                } 
             });
-            //Creamos el punto a partir de la latitud y longitud de una dirección:
-            var point = new google.maps.LatLng(latitud,longitud);
-            //var point = new google.maps.LatLng('41.397122', '2.152873');
-        
-            //Configuramos las opciones indicando zoom, punto y tipo de mapa
-            var myOptions = {
-                zoom: 15, 
-                center: point, 
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-        
-            //Creamos el mapa y lo asociamos a nuestro contenedor
-            var map = new google.maps.Map(document.getElementById("showMap"),  myOptions);
-        
-            //Mostramos el marcador en el punto que hemos creado
-            var marker = new google.maps.Marker({
-                position:point,
-                map: map
-            });
-        } 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(mostrarUbicacion);
-            
-            function mostrarUbicacion (ubicacion) {
-                const lng = ubicacion.coords.longitude;
-                const lat = ubicacion.coords.latitude;  
-                $("#latitude").val(lng);
-                $("#longitude").val(lng);  
-                showGoogleMaps(lat,lng);
-            }
-        } 
-
-        
+        }); 
     </script>
   </body>
 </html>
