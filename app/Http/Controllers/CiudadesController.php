@@ -34,7 +34,7 @@ class CiudadesController extends Controller
         return $score ;
     }
       
-      // Algorithm that calculates the difference between 2 strings(Levenshtein distance)
+      // Algoritmo que calcula la diferencia entre 2 cadenas(Levenshtein distance)
       public function getEditDistance($a, $b){
         if(strlen($a) == 0) return strlen($b);
         if(strlen($b) == 0) return strlen($a);
@@ -56,9 +56,9 @@ class CiudadesController extends Controller
             }
           }
         }
-        return ($matrix[strlen($b)][strlen($a)]); // returns an integer,0 if strings are identical n if they are not nE(0,+infinite)
+        return ($matrix[strlen($b)][strlen($a)]); // devuelve un entero, 0 si las cadenas son idénticas n si no son nE (0, + infinito)
       }
-    
+    //se ordena el array tomando en cuenta el campo score
     function obetner_score($ciudades,$query){
         $array_ciudades_new=array();
         $array_scores = array();

@@ -9,9 +9,11 @@ function sugerencias(){
     longitude = $("#longitude").val(); 
     token = $("#token").val(); 
     url = "sugerencias?q="+q+"&latitude="+latitude+"&longitude="+longitude;
-    $.get(url, function(response) {  
+    $.get(url, function(response) { 
+            //limpiamos los contenedores html 
             $("#datos").html("");
             $("#suggestions").html("");
+            //recorremos lo retornado pasandole una funcion
             response["suggestions"].forEach(logArrayElements);
              //Escribimos las sugerencias que nos manda la consulta
              $('#suggestions').fadeIn(1000);
