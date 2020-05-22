@@ -11,6 +11,7 @@ function sugerencias(){
     url = "sugerencias?q="+q+"&latitude="+latitude+"&longitude="+longitude;
     $.get(url, function(response) {  
             $("#datos").html("");
+            $("#suggestions").html("");
             response["suggestions"].forEach(logArrayElements);
              //Escribimos las sugerencias que nos manda la consulta
              $('#suggestions').fadeIn(1000);
