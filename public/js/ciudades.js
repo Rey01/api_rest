@@ -1,6 +1,6 @@
 
 function logArrayElements(element, index, array) { 
-    $("#t_body").append(' <tr> <td>'+index+'</td>  <td>'+element.name+'</td> <td>'+element.latitude+'</td> <td>'+element.longitude+'</td> <td><button type="button" class="btn btn-primary" onclick="showGoogleMaps('+element.latitude+','+element.longitude+')">Buscar</button></td><tr>  ');
+    $("#suggestions").append(' <div><a class="suggest-element" latitude="'+element.latitude+'" longitude="'+element.longitude+'" data="'+element.name+'" id="product'+index+'">'+element.name+'</a></div>  ');
 }
 function sugerencias(){
     $("#datos").html('<img src="./img/loading.gif">');
@@ -10,45 +10,26 @@ function sugerencias(){
     token = $("#token").val(); 
     url = "sugerencias?q="+q+"&latitude="+latitude+"&longitude="+longitude;
     $.get(url, function(response) {  
-            $("#datos").html("<table class='table'><thead><tr>  <td>#</td>   <td>Nombre</td>  <td>Latitude</td> <td>Longitude</td> <td>Ubicar</td> </tr> </thead><tbody id='t_body'></tbody></table>");
-            response["suggestions"].forEach(logArrayElements); 
+            $("#datos").html("");
+            response["suggestions"].forEach(logArrayElements);
+             //Escribimos las sugerencias que nos manda la consulta
+             $('#suggestions').fadeIn(1000);
+             //Al hacer click en alguna de las sugerencias
+             $('.suggest-element').on('click', function(){
+                     //Obtenemos la id unica de la sugerencia pulsada
+                     var id = $(this).attr('id');
+                     //Obtenemos la latitude de la sugerencia pulsada
+                     var latitude = $(this).attr('latitude');
+                     //Obtenemos la longitude de la sugerencia pulsada
+                     var longitude = $(this).attr('longitude');
+                     //Editamos el valor del input con data de la sugerencia pulsada
+                     $('#q').val($('#'+id).attr('data'));
+                     //Hacemos desaparecer el resto de sugerencias
+                     $('#suggestions').fadeOut(1000);
+                       
+                     //Hacemos que el mapa se ubique en lo seleccionado
+                    showGoogleMaps(latitude,longitude); 
+                     return false;
+             });
         });
 }
-function showGoogleMaps(latitud,longitud)
-{
-    window.scroll({
-    top: 0, 
-    behavior: 'smooth'
-    });
-    //Creamos el punto a partir de la latitud y longitud de una dirección:
-    var point = new google.maps.LatLng(latitud,longitud);
-    //var point = new google.maps.LatLng('41.397122', '2.152873');
-
-    //Configuramos las opciones indicando zoom, punto y tipo de mapa
-    var myOptions = {
-        zoom: 15, 
-        center: point, 
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    //Creamos el mapa y lo asociamos a nuestro contenedor
-    var map = new google.maps.Map(document.getElementById("showMap"),  myOptions);
-
-    //Mostramos el marcador en el punto que hemos creado
-    var marker = new google.maps.Marker({
-        position:point,
-        map: map
-    });
-} 
-
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(mostrarUbicacion);
-    
-    function mostrarUbicacion (ubicacion) {
-        const lng = ubicacion.coords.longitude;
-        const lat = ubicacion.coords.latitude;  
-        $("#latitude").val(lng);
-        $("#longitude").val(lng);  
-        showGoogleMaps(lat,lng);
-    }
-} 

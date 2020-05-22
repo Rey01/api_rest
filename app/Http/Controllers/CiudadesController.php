@@ -16,7 +16,7 @@ class CiudadesController extends Controller
 
         if($request->isMethod('get')){ 
             $data = $request->all();
-            $results = DB::select('SELECT name,latitude,longitude FROM ciudades WHERE ansiname LIKE "%'.$data["q"].'%" LIMIT 100');
+            $results = DB::select('SELECT name,latitude,longitude FROM ciudades WHERE ansiname LIKE "%'.$data["q"].'%" LIMIT 20');
             return response()->json(["suggestions" => $results]);
         }else{ 
             return response()->json(["error"=>"Con un demonio lo que faltaba"],401);

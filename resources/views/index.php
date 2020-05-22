@@ -9,23 +9,44 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css"  crossorigin="anonymous">
 
     <title>Api-Rest</title>
+    <style>
+    #suggestions {
+        box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);
+        height: auto;
+        position: absolute;
+        top: 70px;
+        z-index: 9999;
+        width: 206px;
+    }
+    
+    #suggestions .suggest-element {
+        background-color: #EEEEEE;
+        border-top: 1px solid #d6d4d4;
+        cursor: pointer;
+        padding: 8px;
+        width: 100%;
+        float: left;
+    }
+    </style>
   </head>
   <body>
     <div class="row">
         <div class="col-md-12 text-center">
             <h1>Cliente</h1>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
         </div>
         <div class="col-md-4"> 
                 <div class="form-group"> 
                     <label>Busqueda</label>
-                    <input type="text" class="form-control" id="q" name="q">
+                    <input type="text" class="form-control" id="q" name="q" autocomplete="off">
                     <small id="1" class="form-text text-muted">Para generar la busqueda precionar la tecla "Enter" o dar clic en buscar.</small>
                 </div>  
                 <button type="button" class="btn btn-success" onclick="sugerencias()">Buscar</button> 
+                
+<div id="suggestions"></div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div id="showMap" style="width: 100%; height: 350px;"> </div>
         </div>
     </div>
@@ -34,7 +55,6 @@
         <div class="col-md-2">
         </div>
         <div class="col-md-8 text-center" id="datos" style="margin-top:50px;">
-            <h2>Sin Resultados</h2>  
         </div>
     </div>
 
@@ -97,6 +117,44 @@
                 } 
             });
         }); 
+        function showGoogleMaps(latitud,longitud)
+        {
+            window.scroll({
+            top: 0, 
+            behavior: 'smooth'
+            });
+            //Creamos el punto a partir de la latitud y longitud de una dirección:
+            var point = new google.maps.LatLng(latitud,longitud);
+            //var point = new google.maps.LatLng('41.397122', '2.152873');
+
+            //Configuramos las opciones indicando zoom, punto y tipo de mapa
+            var myOptions = {
+                zoom: 15, 
+                center: point, 
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            //Creamos el mapa y lo asociamos a nuestro contenedor
+            var map = new google.maps.Map(document.getElementById("showMap"),  myOptions);
+
+            //Mostramos el marcador en el punto que hemos creado
+            var marker = new google.maps.Marker({
+                position:point,
+                map: map
+            });
+        } 
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(mostrarUbicacion);
+            
+            function mostrarUbicacion (ubicacion) {
+                const lng = ubicacion.coords.longitude;
+                const lat = ubicacion.coords.latitude;  
+                $("#latitude").val(lng);
+                $("#longitude").val(lng);  
+                showGoogleMaps(lat,lng);
+            }
+        } 
     </script>
   </body>
 </html>
